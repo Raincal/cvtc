@@ -132,7 +132,12 @@ export default class Cvtc {
     if (isUserLogin) {
       log(chalk.green(`${user.email} 已登录`))
       await this.saveCookies('./data/cookies.json')
-      await this.createApplication()
+      try {
+        await this.createApplication()
+      } catch (error) {
+        log(chalk.red('遇到错误，重新创建应用'))
+        await this.createApplication()
+      }
     } else {
       await page.goto(url, { waitUntil: 'load' })
 
@@ -167,6 +172,17 @@ export default class Cvtc {
   async _nextStep (timeout) {
     await this.page.click('.NextButton')
     await this.page.waitFor(timeout)
+  }
+
+  // https://github.com/GoogleChrome/puppeteer/issues/545#issuecomment-325212388
+  async _isVisible (selecter) {
+    const ret = await this.page.evaluate((selecter) => {
+      const e = document.querySelector(selecter)
+      if (!e) { return false }
+      const style = window.getComputedStyle(e)
+      return style && style.display !== 'none' && style.visibility !== 'hidden' && style.opacity !== '0'
+    })
+    return ret
   }
 
   async createApplication () {
@@ -206,7 +222,9 @@ export default class Cvtc {
       await page.waitFor(10000)
 
       log(chalk.red('Program Plans'))
-      await page.select(appSelectSelector('datatel_locationid'), '712413b8-d260-e611-80c2-005056ac2e56')
+      await page.evaluate(() => {
+        document.querySelectorAll('select')[2].options[1].selected = true
+      })
       await page.click('.NextButton')
       await page.waitFor(10000)
 
@@ -214,15 +232,18 @@ export default class Cvtc {
       await page.click('.NextButton')
       await page.waitFor(10000)
 
-      log(chalk.red('Educational History'))
-      await page.click('.OrganizationControlSearchBtn')
-      await page.waitFor(10000)
-      await page.evaluate(() => {
-        const randomNum = Math.floor(Math.random() * (50 - 2 + 1) + 2)
-        document.querySelector(`.OrganizationControlResultsSection select option:nth-child(${randomNum})`).selected = true
-      })
-      await page.click('.OrganizationControlResultsSection .OrganizationControlSearchBtn')
-      await page.waitFor(5000)
+      await log(chalk.red('Educational History'))
+      const clearButton = await this._isVisible('.OrganizationControlClearLink')
+      if (!clearButton) {
+        await page.click('.OrganizationControlSearchBtn')
+        await page.waitFor(10000)
+        await page.evaluate(() => {
+          const randomNum = Math.floor(Math.random() * (50 - 2 + 1) + 2)
+          document.querySelector(`.OrganizationControlResultsSection select option:nth-child(${randomNum})`).selected = true
+        })
+        await page.click('.OrganizationControlResultsSection .OrganizationControlSearchBtn')
+        await page.waitFor(5000)
+      }
       await this._clearInput('cvtc_cvtcgraduationdate')
       await page.type(appInputSelector('cvtc_cvtcgraduationdate'), getRandomGraduationDate())
       await page.select(appSelectSelector('cvtc_cvtcstudenthighestcredentialreceived'), getRandomHCR())

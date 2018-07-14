@@ -9,8 +9,8 @@ async function main () {
   // const user = users[0]
   const cvtc = new Cvtc(user)
   console.log(`${chalk.green('当前用户信息:\n')}`, user)
-  if (!user.registered) {
-    try {
+  try {
+    if (!user.registered) {
       const ret = await cvtc.createAccount(user)
       if (ret) {
         console.log(`${user.email} 注册成功`)
@@ -18,11 +18,11 @@ async function main () {
       } else {
         console.log(chalk.red(`${user.email} 已存在或注册失败`))
       }
-    } catch (error) {
-      console.log(chalk.red(error))
+    } else {
+      await cvtc.login(user)
     }
-  } else {
-    await cvtc.login(user)
+  } catch (error) {
+    console.log(chalk.red(error))
   }
 }
 
