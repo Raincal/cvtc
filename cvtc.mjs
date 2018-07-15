@@ -176,12 +176,12 @@ export default class Cvtc {
 
   // https://github.com/GoogleChrome/puppeteer/issues/545#issuecomment-325212388
   async _isVisible (selecter) {
-    const ret = await this.page.evaluate((selecter) => {
-      const e = document.querySelector(selecter)
+    const elHandle = await this.page.$(selecter)
+    const ret = await this.page.evaluate((e) => {
       if (!e) { return false }
       const style = window.getComputedStyle(e)
       return style && style.display !== 'none' && style.visibility !== 'hidden' && style.opacity !== '0'
-    })
+    }, elHandle)
     return ret
   }
 

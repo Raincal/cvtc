@@ -5,8 +5,7 @@ import { getRandomUser } from './helper.mjs'
 import users from './data/user.json'
 
 async function main () {
-  const user = await getRandomUser()
-  // const user = users[0]
+  const user = users[0].hasApplication ? await getRandomUser() : users[0]
   const cvtc = new Cvtc(user)
   console.log(`${chalk.green('当前用户信息:\n')}`, user)
   try {
