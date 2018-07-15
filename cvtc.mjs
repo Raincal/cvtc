@@ -211,15 +211,13 @@ export default class Cvtc {
       await page.select(appSelectSelector('cvtc_municipalities'), getRandomCounty())
       await page.type(appInputSelector('cvtc_cvtchighschooldistrict'), getRandomDistrict())
       await this._clearInput('datatel_address1_telephone1')
-      await page.click('.NextButton')
-      await page.waitFor(10000)
+      await this._nextStep(10000)
 
       log(chalk.red('Demographics'))
       await page.select(appSelectSelector('datatel_citizenshipstatusid'), 'f5116c26-d260-e611-80c2-005056ac2e56')
       await this._clearInput('datatel_ssn')
       await page.type(appInputSelector('datatel_ssn'), user.ssn)
-      await page.click('.NextButton')
-      await page.waitFor(10000)
+      await this._nextStep(10000)
 
       log(chalk.red('Program Plans'))
       await page.evaluate(() => {
@@ -229,10 +227,9 @@ export default class Cvtc {
       await page.waitFor(10000)
 
       log(chalk.red('Family'))
-      await page.click('.NextButton')
-      await page.waitFor(10000)
+      await this._nextStep(10000)
 
-      await log(chalk.red('Educational History'))
+      log(chalk.red('Educational History'))
       const clearButton = await this._isVisible('.OrganizationControlClearLink')
       if (!clearButton) {
         await page.click('.OrganizationControlSearchBtn')
@@ -247,8 +244,7 @@ export default class Cvtc {
       await this._clearInput('cvtc_cvtcgraduationdate')
       await page.type(appInputSelector('cvtc_cvtcgraduationdate'), getRandomGraduationDate())
       await page.select(appSelectSelector('cvtc_cvtcstudenthighestcredentialreceived'), getRandomHCR())
-      await page.click('.NextButton')
-      await page.waitFor(10000)
+      await this._nextStep(10000)
 
       log(chalk.red('Signature'))
       for (let i = 0; i < 3; i++) {
