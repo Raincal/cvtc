@@ -38,7 +38,7 @@ export function getRandomYear (min, max) {
 }
 
 export function getRandomGraduationDate () {
-  return `${getRandomNumber(12)}/${getRandomNumber(30)}/${getRandomYear(2015, 2018)}`
+  return `05/${getRandomNumber(30)}/${getRandomYear(2015, 2018)}`
 }
 
 export function getBirth (date) {
@@ -108,7 +108,7 @@ export async function getRandomUser () {
     username: login.username,
     password: firstUpperCase(password),
     registered: false,
-    hasApplication: false,
+    has_application: false,
     phone,
     cell
   }

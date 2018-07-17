@@ -1,5 +1,6 @@
 import fs from 'fs'
 import _ from 'ramda'
+import dayjs from 'dayjs'
 import chalk from 'chalk'
 import puppeteer from 'puppeteer'
 
@@ -98,6 +99,7 @@ export default class Cvtc {
 
     if (ret) {
       user.registered = true
+      user.registered_date = dayjs().toISOString()
       await this._saveUser(user)
     }
 
@@ -209,6 +211,7 @@ export default class Cvtc {
       await page.select(appSelectSelector('datatel_genderid'), user.gender === 'Male' ? '6761979e-a734-e611-80c2-005056ac2e56' : '6961979e-a734-e611-80c2-005056ac2e56')
       await page.select(appSelectSelector('datatel_admittypeid'), 'c3b87117-d360-e611-80c2-005056ac2e56')
       await page.select(appSelectSelector('cvtc_municipalities'), getRandomCounty())
+      await this._clearInput('cvtc_cvtchighschooldistrict')
       await page.type(appInputSelector('cvtc_cvtchighschooldistrict'), getRandomDistrict())
       await this._clearInput('datatel_address1_telephone1')
       await this._nextStep(10000)
@@ -267,8 +270,8 @@ export default class Cvtc {
         await this.createApplication()
       }
     } else {
-      if (!this.user.hasApplication) {
-        this.user.hasApplication = true
+      if (!this.user.has_application) {
+        this.user.has_application = true
         await this._saveUser(this.user)
       }
       log(chalk.yellow(`${this.user.email} 已申请应用`))
