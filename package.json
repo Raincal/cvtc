@@ -4,7 +4,8 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "node --experimental-modules index.mjs"
+    "start": "node --experimental-modules index.mjs",
+    "check": "node --experimental-modules check.mjs"
   },
   "dependencies": {
     "chalk": "^2.4.1",
