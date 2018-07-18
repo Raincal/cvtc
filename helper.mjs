@@ -103,7 +103,7 @@ export async function getRandomUser () {
     city: firstUpperCase(location.city),
     state: firstUpperCase(location.state),
     zip: location.postcode + '',
-    ssn: id.value,
+    ssn: id.value.replace(/-/g, ''),
     email: email.replace('example', 'gmail'),
     username: login.username,
     password: firstUpperCase(password),

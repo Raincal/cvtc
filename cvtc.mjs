@@ -238,7 +238,7 @@ export default class Cvtc {
         await page.click('.OrganizationControlSearchBtn')
         await page.waitFor(10000)
         await page.evaluate(() => {
-          const randomNum = Math.floor(Math.random() * (50 - 2 + 1) + 2)
+          const randomNum = Math.floor(Math.random() * (100 - 50 + 1) + 2)
           document.querySelector(`.OrganizationControlResultsSection select option:nth-child(${randomNum})`).selected = true
         })
         await page.click('.OrganizationControlResultsSection .OrganizationControlSearchBtn')

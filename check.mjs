@@ -31,7 +31,7 @@ async function findIdNumber (user) {
   const body = {
     last: user.last,
     first: user.first,
-    num: user.ssn.replace(/-/g, ''),
+    num: user.ssn,
     bdate: dayjs(user.birth).format('YYYY-MM-DD')
   }
   const options = {
@@ -70,8 +70,9 @@ async function createAccount (users) {
   const newUsers = users.filter(user => {
     return user.id_number && !user.mycvtc
   })
+  const existUsers = users.filter(user => user.mycvtc)
   log(chalk`
-    {green 已注册：${users.length - newUsers.length}}
+    {green 已注册：${existUsers.length}}
     {yellow 未注册：${newUsers.length}}
   `)
   usersQueue = []
