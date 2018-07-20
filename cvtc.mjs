@@ -261,7 +261,7 @@ export default class Cvtc {
       await page.click('#ctl00_mainContent_ApplicationForm_ApplicationForm_submitBtn')
       await page.waitFor(10000)
 
-      await page.type('input[name="ctl00$mainContent$AppPaymentControl1$applicationPaymentControl$promocode"]', 'FBSAVE30')
+      await page.type('input[name="ctl00$mainContent$AppPaymentControl1$applicationPaymentControl$promocode"]', 'PREVPAID') // FBSAVE30 IS EXPIRED
       await page.click('.promocodebutton')
       await page.waitFor(10000)
       const finishedUrl = (await page.url()).split('?')[0]
